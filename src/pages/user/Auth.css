@@ -254,3 +254,13 @@
   background: #F4A300;
   color: white;
 }
+
+.difficulty-info {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #64748B;
+  background: #F8FAFC;
+  padding: 12px;
+  border-radius: 8px;
+  line-height: 1.5;
+}

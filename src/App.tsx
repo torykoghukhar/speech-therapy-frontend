@@ -1,10 +1,12 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import Dashboard from "./pages/Dashboard";
-import ResetPassword from "./pages/ResetPassword";
-import ForgotPassword from "./pages/ForgotPassword";
-import Profile from "./pages/Profile";
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import Login from './pages/user/Login'
+import Register from './pages/user/Register'
+import Dashboard from './pages/user/Dashboard'
+import ResetPassword from './pages/user/ResetPassword'
+import ForgotPassword from './pages/user/ForgotPassword'
+import Profile from './pages/user/Profile'
+import Lessons from './pages/lessons/Lessons'
+import LessonDetail from './pages/lessons/LessonDetail'
 
 function App() {
   return (
@@ -16,9 +18,11 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:uid/:token" element={<ResetPassword />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/lessons" element={<Lessons />} />
+        <Route path="/lessons/:id" element={<LessonDetail />} />
       </Routes>
     </BrowserRouter>
-  );
+  )
 }
 
-export default App;
+export default App

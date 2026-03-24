@@ -1,7 +1,7 @@
-import { Link } from "react-router-dom";
-import logo from "../assets/logo.png";
-import { CircleUserRound } from "lucide-react";
-import "./Header.css";
+import { Link } from 'react-router-dom'
+import logo from '../assets/logo.png'
+import { CircleUserRound } from 'lucide-react'
+import './Header.css'
 
 export default function Header() {
   return (
@@ -12,9 +12,15 @@ export default function Header() {
 
       <div className="nav-wrapper">
         <nav className="nav">
-          <Link to="/lessons" className="nav-link">Lessons</Link>
-          <Link to="/progress" className="nav-link">Progress</Link>
-          <Link to="/achievements" className="nav-link">Achievements</Link>
+          <Link to="/lessons" className="nav-link">
+            Lessons
+          </Link>
+          <Link to="/progress" className="nav-link">
+            Progress
+          </Link>
+          <Link to="/achievements" className="nav-link">
+            Achievements
+          </Link>
         </nav>
 
         <Link to="/profile" className="profile">
@@ -22,5 +28,5 @@ export default function Header() {
         </Link>
       </div>
     </header>
-  );
+  )
 }
