@@ -171,3 +171,26 @@
 .result-modal h2 {
   font-size: 26px;
 }
+
+.record-controls {
+  margin-top: 20px;
+}
+
+.record-btn {
+  padding: 14px 24px;
+  border-radius: 14px;
+  border: none;
+  background: #4CAF50;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.record-btn:hover {
+  transform: scale(1.05);
+}
+
+.recording {
+  background: #E53935;
+}
