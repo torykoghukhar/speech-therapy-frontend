@@ -16,9 +16,39 @@ export default function LessonDetail() {
   const [showFinishModal, setShowFinishModal] = useState(false)
   const [averageScore, setAverageScore] = useState<number | null>(null)
 
+  const [isRecording, setIsRecording] = useState(false)
+  const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null)
+  const [audioBlob, setAudioBlob] = useState<Blob | null>(null)
+
   const audioRef = useRef<HTMLAudioElement | null>(null)
 
   const startedRef = useRef(false)
+
+  const startRecording = async () => {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+
+    const recorder = new MediaRecorder(stream)
+    // eslint-disable-next-line no-undef
+    let chunks: BlobPart[] = []
+
+    recorder.ondataavailable = (e) => {
+      chunks.push(e.data)
+    }
+
+    recorder.onstop = () => {
+      const blob = new Blob(chunks, { type: 'audio/webm' })
+      setAudioBlob(blob)
+    }
+
+    recorder.start()
+    setMediaRecorder(recorder)
+    setIsRecording(true)
+  }
+
+  const stopRecording = () => {
+    mediaRecorder?.stop()
+    setIsRecording(false)
+  }
 
   useEffect(() => {
     if (startedRef.current) return
@@ -91,16 +121,23 @@ export default function LessonDetail() {
   }, [averageScore])
 
   const goNext = async () => {
-    if (!lesson) return null
+    if (!lesson) return
 
     const exercise = lesson.exercises[currentIndex]
 
-    if (sessionId) {
-      await api.post('progress/submit/', {
-        session: sessionId,
-        exercise: exercise.id,
-        accuracy_score: Math.floor(Math.random() * 40) + 60,
+    if (sessionId && audioBlob) {
+      const formData = new FormData()
+      formData.append('session', String(sessionId))
+      formData.append('exercise', String(exercise.id))
+      formData.append('recorded_audio', audioBlob)
+
+      const res = await api.post('progress/submit/', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
       })
+      // eslint-disable-next-line no-console
+      console.log('AI RESULT:', res.data)
     }
 
     if (currentIndex === lesson.exercises.length - 1) {
@@ -139,6 +176,17 @@ export default function LessonDetail() {
             alt={exercise.title}
             className="exercise-image"
           />
+          <div className="record-controls">
+            {!isRecording ? (
+              <button onClick={startRecording} className="record-btn">
+                🎤 Start Recording
+              </button>
+            ) : (
+              <button onClick={stopRecording} className="record-btn recording">
+                ⏹ Stop Recording
+              </button>
+            )}
+          </div>
         </div>
 
         <div className="nav-buttons">
