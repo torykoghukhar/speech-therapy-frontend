@@ -84,9 +84,16 @@ export default function Lessons() {
                         <div className="lesson-content">
                           <h3>{lesson.title}</h3>
                           <p>{lesson.description}</p>
-
+                          {lesson.is_completed &&
+                            lesson.best_score !== null && (
+                              <div className="lesson-score">
+                                ⭐ {lesson.best_score}%
+                              </div>
+                            )}
                           <button className="primary-btn small-btn">
-                            Start Lesson
+                            {lesson.is_completed
+                              ? 'Repeat Lesson'
+                              : 'Start Lesson'}
                           </button>
                         </div>
                       </div>
