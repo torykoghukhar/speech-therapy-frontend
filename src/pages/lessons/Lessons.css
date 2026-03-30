@@ -160,3 +160,16 @@
   );
   border-radius: 2px;
 }
+
+.lesson-score {
+  font-size: 14px;
+  font-weight: 600;
+  color: #4CAF50;
+
+  background: rgba(76,175,80,0.1);
+  padding: 6px 10px;
+  border-radius: 10px;
+
+  display: inline-block;
+  margin-bottom: 10px;
+}

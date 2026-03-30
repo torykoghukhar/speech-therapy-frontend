@@ -1,5 +1,6 @@
 type Exercise = {
   id: number
+  word: string
   title: string
   image: string
   audio_file: string
@@ -12,6 +13,12 @@ type Lesson = {
   description: string
   age_category: string
   exercises: Exercise[]
+  is_completed: boolean
+  best_score: number | null
 }
 
-export type { Exercise, Lesson }
+type ResultResponse = {
+  passed: boolean
+}
+
+export type { Exercise, Lesson, ResultResponse }

@@ -4,45 +4,88 @@
   text-align: center;
 }
 
-.exercise-container {
-  margin: 40px 0;
+.exercise-layout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+}
+
+.exercise-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
 }
 
 .exercise-image {
-  width: 420px;
-  height: 500px;
+  width: 520px;
+  height: 620px;
   object-fit: cover;
-  border-radius: 20px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+  border-radius: 30px;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.2);
 }
 
-.nav-buttons {
+.exercise-bottom {
   display: flex;
-  justify-content: center;
-  gap: 40px;
-  margin-top: 30px;
+  align-items: center;
+  gap: 20px;
 }
+
+.exercise-word {
+  font-size: 42px;
+  font-weight: 700;
+  color: #1E293B;
+  letter-spacing: 2px;
+
+  padding: 10px 20px;
+  border-radius: 16px;
+
+  background: linear-gradient(135deg, #fff, #f8fafc);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.record-btn {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+
+  border: none;
+  background: linear-gradient(135deg, #4CAF50, #66bb6a);
+  color: white;
+  font-size: 24px;
+
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.record-btn:hover {
+  transform: scale(1.1);
+}
+
+.recording {
+  background: #E53935;
+}
+
 
 .nav-btn {
   width: 70px;
   height: 70px;
   border-radius: 50%;
+
   border: none;
   background: linear-gradient(135deg, #F4A300, #ffbf3f);
   color: white;
-  font-size: 32px;
+
+  font-size: 30px;
   cursor: pointer;
-  transition: all 0.25s ease;
+
+  transition: 0.25s;
   box-shadow: 0 10px 20px rgba(244,163,0,0.3);
 }
 
-.nav-btn:hover:not(:disabled) {
-  transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 15px 30px rgba(244,163,0,0.4);
-}
-
-.nav-btn:active:not(:disabled) {
-  transform: scale(0.95);
+.nav-btn.active {
+  background: linear-gradient(135deg, #4CAF50, #66bb6a);
 }
 
 .nav-btn:disabled {
@@ -54,7 +97,7 @@
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.3);
-  backdrop-filter: blur(6px); /* 🔥 стекло эффект */
+  backdrop-filter: blur(6px);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -66,7 +109,7 @@
   padding: 40px 50px;
   border-radius: 25px;
   text-align: center;
-  width: 420px; /* было 300 */
+  width: 420px;
   max-width: 90%;
   box-shadow: 0 25px 60px rgba(0,0,0,0.25);
 }
@@ -170,27 +213,4 @@
 
 .result-modal h2 {
   font-size: 26px;
-}
-
-.record-controls {
-  margin-top: 20px;
-}
-
-.record-btn {
-  padding: 14px 24px;
-  border-radius: 14px;
-  border: none;
-  background: #4CAF50;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.record-btn:hover {
-  transform: scale(1.05);
-}
-
-.recording {
-  background: #E53935;
 }

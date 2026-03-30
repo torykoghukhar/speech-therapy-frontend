@@ -4,7 +4,7 @@ import api from '../../api/axios'
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 import './LessonDetail.css'
-import type { Lesson } from '../../types/lesson'
+import type { Lesson, ResultResponse } from '../../types/lesson'
 
 export default function LessonDetail() {
   const { id } = useParams()
@@ -12,24 +12,39 @@ export default function LessonDetail() {
 
   const [lesson, setLesson] = useState<Lesson | null>(null)
   const [sessionId, setSessionId] = useState<number | null>(null)
-  const [currentIndex, setCurrentIndex] = useState(0)
   const [showFinishModal, setShowFinishModal] = useState(false)
   const [averageScore, setAverageScore] = useState<number | null>(null)
 
   const [isRecording, setIsRecording] = useState(false)
-  const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null)
-  const [audioBlob, setAudioBlob] = useState<Blob | null>(null)
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null)
+
+  const [isCurrentPassed, setIsCurrentPassed] = useState(false)
+  const [passedExercises, setPassedExercises] = useState<number[]>([])
+  const [pendingPass, setPendingPass] = useState<number | null>(null)
 
   const audioRef = useRef<HTMLAudioElement | null>(null)
-
   const startedRef = useRef(false)
 
+  const audioLoopRef = useRef(false)
+
+  const remainingExercises =
+    lesson?.exercises.filter((_, index) => !passedExercises.includes(index)) ||
+    []
+
+  const exercise = remainingExercises[0]
+
   const startRecording = async () => {
+    if (audioRef.current) {
+      audioRef.current.pause()
+      audioRef.current.currentTime = 0
+    }
+
+    audioLoopRef.current = true
+
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
 
     const recorder = new MediaRecorder(stream)
-    // eslint-disable-next-line no-undef
-    let chunks: BlobPart[] = []
+    let chunks: Blob[] = []
 
     recorder.ondataavailable = (e) => {
       chunks.push(e.data)
@@ -37,24 +52,109 @@ export default function LessonDetail() {
 
     recorder.onstop = () => {
       const blob = new Blob(chunks, { type: 'audio/webm' })
-      setAudioBlob(blob)
+      const formData = new FormData()
+      formData.append('recorded_audio', blob)
     }
 
     recorder.start()
-    setMediaRecorder(recorder)
+    mediaRecorderRef.current = recorder
     setIsRecording(true)
   }
 
-  const stopRecording = () => {
-    mediaRecorder?.stop()
+  const stopRecording = async () => {
+    const recorder = mediaRecorderRef.current
+    if (!recorder || !lesson || !sessionId || !exercise) return
+
+    let chunks: Blob[] = []
+
+    recorder.ondataavailable = (e) => {
+      chunks.push(e.data)
+    }
+
+    recorder.onstop = async () => {
+      const blob = new Blob(chunks, { type: 'audio/webm' })
+
+      const formData = new FormData()
+      formData.append('session', String(sessionId))
+      formData.append('exercise', String(exercise.id))
+      formData.append('recorded_audio', blob)
+
+      const res = await api.post('progress/submit/', formData)
+      handleResult(res.data)
+    }
+
+    recorder.stop()
     setIsRecording(false)
   }
+
+  const playSuccess = () => new Audio('/sounds/success.mp3').play()
+  const playFail = () => new Audio('/sounds/fail.mp3').play()
+
+  const handleResult = (data: ResultResponse) => {
+    const { passed } = data
+
+    if (!exercise || !lesson) return
+
+    const realIndex = lesson.exercises.findIndex((ex) => ex.id === exercise.id)
+
+    if (passed) {
+      playSuccess()
+
+      setIsCurrentPassed(true)
+      setPendingPass(realIndex)
+
+      // 🔥 ОСТАНАВЛИВАЕМ аудио полностью
+      audioLoopRef.current = true
+      if (audioRef.current) {
+        audioRef.current.pause()
+        audioRef.current.currentTime = 0
+      }
+    } else {
+      playFail()
+      setIsCurrentPassed(false)
+
+      // 🔥 ПЕРЕЗАПУСК цикла аудио
+      audioLoopRef.current = false
+    }
+  }
+
+  useEffect(() => {
+    if (!exercise || showFinishModal || averageScore !== null) return
+    if (isRecording || isCurrentPassed) return
+
+    let isCancelled = false
+    audioLoopRef.current = false
+
+    const audio = new Audio(exercise.audio_file)
+    audioRef.current = audio
+
+    const playLoop = async () => {
+      while (!isCancelled && !audioLoopRef.current) {
+        await audio.play().catch(() => {})
+
+        await new Promise((resolve) => {
+          audio.onended = resolve
+        })
+
+        // 🔥 ПАУЗА 1.5 секунды
+        await new Promise((r) => setTimeout(r, 1500))
+      }
+    }
+
+    playLoop()
+
+    return () => {
+      isCancelled = true
+      audio.pause()
+      audio.currentTime = 0
+    }
+  }, [exercise, isRecording, isCurrentPassed, showFinishModal, averageScore])
 
   useEffect(() => {
     if (startedRef.current) return
     startedRef.current = true
 
-    const loadLesson = async () => {
+    const load = async () => {
       const res = await api.get(`lessons/${id}/`)
       setLesson(res.data)
 
@@ -62,95 +162,25 @@ export default function LessonDetail() {
       setSessionId(sessionRes.data.session_id)
     }
 
-    loadLesson()
+    load()
   }, [id])
 
-  useEffect(() => {
-    if (!lesson || showFinishModal || averageScore !== null) return
+  const goNext = () => {
+    if (!lesson || !isCurrentPassed || pendingPass === null) return
 
-    const exercise = lesson.exercises[currentIndex]
-    if (!exercise) return
+    const updatedPassed = [...passedExercises, pendingPass]
 
-    if (audioRef.current) {
-      audioRef.current.pause()
-      audioRef.current.currentTime = 0
-    }
+    setPassedExercises(updatedPassed)
+    setPendingPass(null)
+    setIsCurrentPassed(false)
 
-    const audio = new Audio(exercise.audio_file)
-    audioRef.current = audio
+    const remaining = lesson.exercises.filter(
+      (_, index) => !updatedPassed.includes(index)
+    )
 
-    let isCancelled = false
-
-    const playWithPause = async () => {
-      for (let i = 0; i < 5; i++) {
-        if (isCancelled) return
-
-        try {
-          await audio.play()
-        } catch (e) {
-          // eslint-disable-next-line no-console
-          console.log('Play error:', e)
-        }
-
-        await new Promise((resolve) => {
-          audio.onended = resolve
-        })
-
-        if (i < 4) {
-          await new Promise((resolve) => setTimeout(resolve, 2000))
-        }
-      }
-    }
-
-    playWithPause()
-
-    return () => {
-      isCancelled = true
-      audio.pause()
-      audio.currentTime = 0
-    }
-  }, [currentIndex, lesson, showFinishModal, averageScore])
-
-  useEffect(() => {
-    if (averageScore !== null) {
-      if (audioRef.current) {
-        audioRef.current.pause()
-        audioRef.current.currentTime = 0
-      }
-    }
-  }, [averageScore])
-
-  const goNext = async () => {
-    if (!lesson) return
-
-    const exercise = lesson.exercises[currentIndex]
-
-    if (sessionId && audioBlob) {
-      const formData = new FormData()
-      formData.append('session', String(sessionId))
-      formData.append('exercise', String(exercise.id))
-      formData.append('recorded_audio', audioBlob)
-
-      const res = await api.post('progress/submit/', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
-      // eslint-disable-next-line no-console
-      console.log('AI RESULT:', res.data)
-    }
-
-    if (currentIndex === lesson.exercises.length - 1) {
+    if (remaining.length === 0) {
       setShowFinishModal(true)
-      return
     }
-
-    setCurrentIndex((prev) => prev + 1)
-  }
-
-  const goBack = () => {
-    if (currentIndex === 0) return
-    setCurrentIndex((prev) => prev - 1)
   }
 
   const finishLesson = async () => {
@@ -161,59 +191,54 @@ export default function LessonDetail() {
 
   if (!lesson) return null
 
-  const exercise = lesson.exercises[currentIndex]
+  if (!exercise && !showFinishModal && averageScore === null) {
+    return null
+  }
 
   return (
     <>
       <Header />
 
       <div className="lesson-player">
-        <h2>{lesson.title}</h2>
+        {exercise && (
+          <div className="exercise-layout">
+            <button disabled className="nav-btn side left">
+              ←
+            </button>
 
-        <div className="exercise-container">
-          <img
-            src={exercise.image}
-            alt={exercise.title}
-            className="exercise-image"
-          />
-          <div className="record-controls">
-            {!isRecording ? (
-              <button onClick={startRecording} className="record-btn">
-                🎤 Start Recording
-              </button>
-            ) : (
-              <button onClick={stopRecording} className="record-btn recording">
-                ⏹ Stop Recording
-              </button>
-            )}
+            <div className="exercise-center">
+              <img
+                src={exercise.image}
+                alt={exercise.title}
+                className="exercise-image"
+              />
+
+              <div className="exercise-bottom">
+                <div className="exercise-word">{exercise.word}</div>
+
+                <button
+                  onClick={isRecording ? stopRecording : startRecording}
+                  className={`record-btn ${isRecording ? 'recording' : ''}`}
+                >
+                  {!isRecording ? '▶' : '❚❚'}
+                </button>
+              </div>
+            </div>
+
+            <button
+              onClick={goNext}
+              disabled={!isCurrentPassed}
+              className={`nav-btn side right ${isCurrentPassed ? 'active' : ''}`}
+            >
+              →
+            </button>
           </div>
-        </div>
-
-        <div className="nav-buttons">
-          <button
-            onClick={goBack}
-            disabled={currentIndex === 0}
-            className="nav-btn"
-          >
-            ←
-          </button>
-
-          <button onClick={goNext} className="nav-btn">
-            →
-          </button>
-        </div>
+        )}
       </div>
 
       {showFinishModal && (
         <div className="modal">
           <div className="modal-content">
-            <button
-              className="modal-close"
-              onClick={() => setShowFinishModal(false)}
-            >
-              ✕
-            </button>
-
             <h3>Finish lesson?</h3>
 
             <div className="modal-actions">
