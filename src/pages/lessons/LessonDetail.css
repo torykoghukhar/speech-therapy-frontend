@@ -214,3 +214,89 @@
 .result-modal h2 {
   font-size: 26px;
 }
+
+.points-popup {
+  position: fixed;
+  top: 120px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  font-size: 40px;
+  font-weight: 700;
+  color: #4CAF50;
+
+  animation: floatUp 1.2s ease forwards;
+}
+
+@keyframes floatUp {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 20px) scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -10px) scale(1.1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -40px) scale(1);
+  }
+}
+
+.points-earned {
+  font-size: 22px;
+  font-weight: 600;
+  color: #4CAF50;
+
+  margin-bottom: 20px;
+}
+
+.achievement-popup {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(8px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 999;
+}
+
+.achievement-popup-content {
+  background: white;
+  padding: 40px;
+  border-radius: 25px;
+  text-align: center;
+
+  animation: scaleIn 0.3s ease;
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.7);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.achievement-unlock-card {
+  margin-top: 20px;
+}
+
+.achievement-unlock-card img {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+
+  animation: pop 0.4s ease;
+}
+
+@keyframes pop {
+  0% { transform: scale(0.5) rotate(-10deg); }
+  100% { transform: scale(1) rotate(0); }
+}

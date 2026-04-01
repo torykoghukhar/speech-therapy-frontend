@@ -19,6 +19,7 @@ type Lesson = {
 
 type ResultResponse = {
   passed: boolean
+  attempt_number: number
 }
 
 export type { Exercise, Lesson, ResultResponse }

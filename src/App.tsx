@@ -7,6 +7,7 @@ import ForgotPassword from './pages/user/ForgotPassword'
 import Profile from './pages/user/Profile'
 import Lessons from './pages/lessons/Lessons'
 import LessonDetail from './pages/lessons/LessonDetail'
+import Achievements from './pages/achievements/Achievements'
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/lessons" element={<Lessons />} />
         <Route path="/lessons/:id" element={<LessonDetail />} />
+        <Route path="/achievements" element={<Achievements />} />
       </Routes>
     </BrowserRouter>
   )

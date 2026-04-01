@@ -58,3 +58,32 @@
   transform: scale(1.08);
   box-shadow: 0 4px 12px rgba(244, 163, 0, 0.25);
 }
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.points-badge {
+  font-size: 16px;
+  font-weight: 700;
+
+  padding: 6px 12px;
+  border-radius: 12px;
+
+  background: linear-gradient(135deg, #fca800f9, #fab731);
+  color: white;
+
+  box-shadow: 0 5px 15px rgba(244,163,0,0.3);
+
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  transition: 0.2s;
+}
+
+.points-badge:hover {
+  transform: scale(1.05);
+}
