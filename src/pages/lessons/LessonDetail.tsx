@@ -1,10 +1,12 @@
 import { useEffect, useState, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import confetti from 'canvas-confetti'
 import api from '../../api/axios'
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 import './LessonDetail.css'
 import type { Lesson, ResultResponse } from '../../types/lesson'
+import type { Achievement } from '../../types/achievement'
 
 export default function LessonDetail() {
   const { id } = useParams()
@@ -21,6 +23,11 @@ export default function LessonDetail() {
   const [isCurrentPassed, setIsCurrentPassed] = useState(false)
   const [passedExercises, setPassedExercises] = useState<number[]>([])
   const [pendingPass, setPendingPass] = useState<number | null>(null)
+
+  const [earnedPoints, setEarnedPoints] = useState(0)
+  const [popupPoints, setPopupPoints] = useState<number | null>(null)
+
+  const [newAchievements, setNewAchievements] = useState<Achievement[]>([])
 
   const audioRef = useRef<HTMLAudioElement | null>(null)
   const startedRef = useRef(false)
@@ -103,7 +110,21 @@ export default function LessonDetail() {
       setIsCurrentPassed(true)
       setPendingPass(realIndex)
 
-      // 🔥 ОСТАНАВЛИВАЕМ аудио полностью
+      let points = 0
+
+      if (data.attempt_number === 1) points = 2
+      else if (data.attempt_number === 2) points = 1
+
+      setEarnedPoints((prev) => prev + points)
+
+      if (points > 0) {
+        setPopupPoints(points)
+
+        setTimeout(() => {
+          setPopupPoints(null)
+        }, 1200)
+      }
+
       audioLoopRef.current = true
       if (audioRef.current) {
         audioRef.current.pause()
@@ -113,7 +134,6 @@ export default function LessonDetail() {
       playFail()
       setIsCurrentPassed(false)
 
-      // 🔥 ПЕРЕЗАПУСК цикла аудио
       audioLoopRef.current = false
     }
   }
@@ -136,7 +156,6 @@ export default function LessonDetail() {
           audio.onended = resolve
         })
 
-        // 🔥 ПАУЗА 1.5 секунды
         await new Promise((r) => setTimeout(r, 1500))
       }
     }
@@ -165,6 +184,32 @@ export default function LessonDetail() {
     load()
   }, [id])
 
+  useEffect(() => {
+    if (newAchievements.length > 0) {
+      confetti({
+        particleCount: 120,
+        spread: 70,
+        origin: { y: 0.6 },
+      })
+
+      setTimeout(() => {
+        confetti({
+          particleCount: 80,
+          angle: 60,
+          spread: 55,
+          origin: { x: 0 },
+        })
+
+        confetti({
+          particleCount: 80,
+          angle: 120,
+          spread: 55,
+          origin: { x: 1 },
+        })
+      }, 200)
+    }
+  }, [newAchievements])
+
   const goNext = () => {
     if (!lesson || !isCurrentPassed || pendingPass === null) return
 
@@ -186,7 +231,11 @@ export default function LessonDetail() {
   const finishLesson = async () => {
     const res = await api.post(`progress/complete/${sessionId}/`)
     setAverageScore(res.data.average_score)
+    setEarnedPoints(res.data.earned_points || 0)
+    setNewAchievements(res.data.new_achievements || [])
     setShowFinishModal(false)
+
+    window.dispatchEvent(new Event('pointsUpdated'))
   }
 
   if (!lesson) return null
@@ -200,6 +249,7 @@ export default function LessonDetail() {
       <Header />
 
       <div className="lesson-player">
+        {popupPoints && <div className="points-popup">+{popupPoints} ⭐</div>}
         {exercise && (
           <div className="exercise-layout">
             <button disabled className="nav-btn side left">
@@ -236,6 +286,29 @@ export default function LessonDetail() {
         )}
       </div>
 
+      {newAchievements.length > 0 && (
+        <div className="achievement-popup">
+          <div className="achievement-popup-content">
+            <h2>🎉 New Achievement!</h2>
+
+            {newAchievements.map((ach) => (
+              <div key={ach.id} className="achievement-unlock-card">
+                <img src={`http://localhost:8000${ach.image}`} />
+
+                <div>{ach.name}</div>
+              </div>
+            ))}
+
+            <button
+              className="primary-btn"
+              onClick={() => setNewAchievements([])}
+            >
+              Awesome!
+            </button>
+          </div>
+        </div>
+      )}
+
       {showFinishModal && (
         <div className="modal">
           <div className="modal-content">
@@ -250,7 +323,7 @@ export default function LessonDetail() {
         </div>
       )}
 
-      {averageScore !== null && (
+      {averageScore !== null && newAchievements.length === 0 && (
         <div className="modal">
           <div className="modal-content result-modal">
             <button
@@ -263,6 +336,8 @@ export default function LessonDetail() {
             <h2>Lesson Completed 🎉</h2>
 
             <p className="result-score">{averageScore.toFixed(1)}%</p>
+
+            <div className="points-earned">+{earnedPoints} ⭐ earned</div>
 
             <button
               className="primary-btn"

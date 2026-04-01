@@ -1,9 +1,27 @@
 import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 import logo from '../assets/logo.png'
 import { CircleUserRound } from 'lucide-react'
+import api from '../api/axios'
 import './Header.css'
 
 export default function Header() {
+  const [points, setPoints] = useState<number>(0)
+
+  useEffect(() => {
+    const loadPoints = async () => {
+      try {
+        const res = await api.get('users/child/')
+        setPoints(res.data?.points || 0)
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error('Failed to load points', error)
+      }
+    }
+
+    loadPoints()
+  }, [])
+
   return (
     <header className="header">
       <Link to="/dashboard">
@@ -23,9 +41,13 @@ export default function Header() {
           </Link>
         </nav>
 
-        <Link to="/profile" className="profile">
-          <CircleUserRound size={48} strokeWidth={2} />
-        </Link>
+        <div className="header-right">
+          <div className="points-badge">⭐ {points}</div>
+
+          <Link to="/profile" className="profile">
+            <CircleUserRound size={48} strokeWidth={2} />
+          </Link>
+        </div>
       </div>
     </header>
   )
