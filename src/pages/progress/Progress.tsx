@@ -34,31 +34,94 @@ const CustomTooltip = ({ active, payload, label }: TooltipProps) => {
   )
 }
 
+const downloadPDF = async () => {
+  const response = await api.get('progress/pdf/', {
+    responseType: 'blob',
+  })
+
+  const url = window.URL.createObjectURL(new Blob([response.data]))
+  const link = document.createElement('a')
+  link.href = url
+  link.setAttribute('download', 'progress.pdf')
+  document.body.appendChild(link)
+  link.click()
+}
+
 export default function Progress() {
   const [stats, setStats] = useState<Stats | null>(null)
   const [period, setPeriod] = useState('7d')
+
+  const [status, setStatus] = useState<
+    'loading' | 'no_child' | 'no_data' | 'ok'
+  >('loading')
 
   useEffect(() => {
     const loadStats = async () => {
       try {
         const res = await api.get(`progress/stats/?period=${period}`)
+
+        setStatus(res.data.status || 'ok')
         setStats(res.data)
       } catch (err) {
         // eslint-disable-next-line no-console
         console.error('Failed to load stats', err)
+        setStatus('no_child')
       }
     }
 
     loadStats()
   }, [period])
 
-  if (!stats) return <div>Loading...</div>
+  if (status === 'no_child') {
+    return (
+      <>
+        <Header />
+        <div className="empty-state">
+          <h2>No child profile 👶</h2>
+          <p>
+            You haven’t added a child yet. Add your child to start tracking
+            progress.
+          </p>
+
+          <button onClick={() => (window.location.href = '/profile')}>
+            Go to Profile
+          </button>
+        </div>
+        <Footer />
+      </>
+    )
+  }
+
+  if (status === 'no_data') {
+    return (
+      <>
+        <Header />
+        <div className="empty-state">
+          <h2>No progress yet 📊</h2>
+          <p>
+            Once your child completes lessons, progress and analytics will
+            appear here.
+          </p>
+        </div>
+        <Footer />
+      </>
+    )
+  }
+
+  if (status === 'loading' || !stats) {
+    return <div>Loading...</div>
+  }
 
   return (
     <>
       <Header />
       <div className="progress-page">
         <div className="progress-container">
+          <div className="progress-top-bar">
+            <button className="pdf-btn" onClick={downloadPDF}>
+              Download PDF
+            </button>
+          </div>
           <div className="progress-header">
             <h1 className="progress-title">Child Progress Overview</h1>
             <div className="title-underline" />
