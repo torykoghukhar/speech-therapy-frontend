@@ -11,6 +11,20 @@ type ChildProfile = {
   name: string
   age: number | string
   difficulty_level: number
+  speech_therapist?: string | null
 }
 
-export type { UserProfile, ChildProfile }
+type Therapist = {
+  id: number
+  name: string
+}
+
+type TherapistChild = {
+  id: number
+  name: string
+  age: number
+  difficulty: number
+  parent_contact: string | null
+}
+
+export type { UserProfile, ChildProfile, Therapist, TherapistChild }
