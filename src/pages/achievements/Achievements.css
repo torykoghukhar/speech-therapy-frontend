@@ -109,3 +109,11 @@
   border-color: #F4A300;
   color: #F4A300;
 }
+
+
+.icon {
+  width: 28px;
+  height: 28px;
+  color: #F4A300;
+  transition: 0.3s ease;
+}

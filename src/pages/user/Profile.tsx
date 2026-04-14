@@ -5,11 +5,19 @@ import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 import { CircleUserRound } from 'lucide-react'
 import './Auth.css'
-import type { UserProfile, ChildProfile } from '../../types/user'
+import type {
+  UserProfile,
+  ChildProfile,
+  Therapist,
+  TherapistChild,
+} from '../../types/user'
 
 export default function Profile() {
   const [profile, setProfile] = useState<UserProfile | null>(null)
   const [child, setChild] = useState<ChildProfile | null>(null)
+  const [therapists, setTherapists] = useState<Therapist[]>([])
+  const [children, setChildren] = useState<TherapistChild[]>([])
+  const [openId, setOpenId] = useState<number | null>(null)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -30,6 +38,26 @@ export default function Profile() {
 
     loadData()
   }, [])
+
+  useEffect(() => {
+    const loadTherapists = async () => {
+      try {
+        const res = await api.get('users/therapists/')
+        setTherapists(res.data)
+      } catch (e) {
+        // eslint-disable-next-line no-console
+        console.error('Failed to load therapists', e)
+      }
+    }
+
+    loadTherapists()
+  }, [])
+
+  useEffect(() => {
+    if (profile?.role === 'speech_therapist') {
+      api.get('users/therapist/children/').then((res) => setChildren(res.data))
+    }
+  }, [profile])
 
   const updateProfile = async () => {
     await api.patch('users/profile/', profile)
@@ -108,90 +136,154 @@ export default function Profile() {
             <button className="primary-btn" onClick={updateProfile}>
               Save Changes
             </button>
-
-            <hr style={{ margin: '40px 0' }} />
-
-            <h3>Child Profile</h3>
-
-            {!child && (
-              <button
-                className="primary-btn"
-                onClick={() =>
-                  setChild({ name: '', age: '', difficulty_level: 1 })
-                }
-              >
-                + Create Child
-              </button>
-            )}
-
-            {child && (
+            {profile.role === 'parent' && (
               <>
-                <div className="input-group">
-                  <label>Child Name</label>
-                  <input
-                    value={child.name || ''}
-                    onChange={(e) =>
-                      setChild({ ...child, name: e.target.value })
-                    }
-                  />
-                </div>
+                <hr style={{ margin: '40px 0' }} />
+                <h3>Child Profile</h3>
 
-                <div className="input-group">
-                  <label>Age</label>
-                  <input
-                    type="number"
-                    value={child.age || ''}
-                    onChange={(e) =>
-                      setChild({ ...child, age: e.target.value })
-                    }
-                  />
-                </div>
-
-                <div className="input-group">
-                  <label>Difficulty Level</label>
-
-                  <select
-                    className="custom-select"
-                    value={child.difficulty_level || 1}
-                    onChange={(e) =>
-                      setChild({
-                        ...child,
-                        difficulty_level: Number(e.target.value),
-                      })
+                {!child && (
+                  <button
+                    className="primary-btn"
+                    onClick={() =>
+                      setChild({ name: '', age: '', difficulty_level: 1 })
                     }
                   >
-                    <option value={1}>1 — Big speech difficulties</option>
-                    <option value={2}>2 — Moderate level</option>
-                    <option value={3}>3 — Advanced speech</option>
-                  </select>
+                    + Create Child
+                  </button>
+                )}
 
-                  <div className="difficulty-info">
-                    <p>
-                      Choose difficulty level depending on your child's speech
-                      development:
-                    </p>
+                {child && (
+                  <>
+                    <div className="input-group">
+                      <label>Child Name</label>
+                      <input
+                        value={child.name || ''}
+                        onChange={(e) =>
+                          setChild({ ...child, name: e.target.value })
+                        }
+                      />
+                    </div>
 
-                    <ul>
-                      <li>
-                        <strong>1</strong> — Exercises will be easier
-                      </li>
-                      <li>
-                        <strong>2</strong> — Balanced difficulty
-                      </li>
-                      <li>
-                        <strong>3</strong> — More advanced speech level
-                      </li>
-                    </ul>
+                    <div className="input-group">
+                      <label>Age</label>
+                      <input
+                        type="number"
+                        value={child.age || ''}
+                        onChange={(e) =>
+                          setChild({ ...child, age: e.target.value })
+                        }
+                      />
+                    </div>
+
+                    <div className="input-group">
+                      <label>Speech Therapist (optional)</label>
+                      <select
+                        className="custom-select"
+                        value={child?.speech_therapist || ''}
+                        onChange={(e) =>
+                          setChild({
+                            ...child,
+                            speech_therapist: e.target.value || null,
+                          })
+                        }
+                      >
+                        <option value="">No therapist</option>
+
+                        {therapists.map((t) => (
+                          <option key={t.id} value={t.id}>
+                            {t.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div className="input-group">
+                      <label>Difficulty Level</label>
+
+                      <select
+                        className="custom-select"
+                        value={child.difficulty_level || 1}
+                        onChange={(e) =>
+                          setChild({
+                            ...child,
+                            difficulty_level: Number(e.target.value),
+                          })
+                        }
+                      >
+                        <option value={1}>1 — Big speech difficulties</option>
+                        <option value={2}>2 — Moderate level</option>
+                        <option value={3}>3 — Advanced speech</option>
+                      </select>
+
+                      <div className="difficulty-info">
+                        <p>
+                          Choose difficulty level depending on your child's
+                          speech development:
+                        </p>
+
+                        <ul>
+                          <li>
+                            <strong>1</strong> — Exercises will be easier
+                          </li>
+                          <li>
+                            <strong>2</strong> — Balanced difficulty
+                          </li>
+                          <li>
+                            <strong>3</strong> — More advanced speech level
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+
+                    <button className="primary-btn" onClick={saveChild}>
+                      Save Child
+                    </button>
+                  </>
+                )}
+              </>
+            )}
+            {profile.role === 'speech_therapist' && (
+              <>
+                <hr style={{ margin: '40px 0' }} />
+                <h3>Your Students</h3>
+
+                {children.length === 0 && (
+                  <p className="empty-text">No children assigned yet 👶</p>
+                )}
+
+                {children.map((c) => (
+                  <div
+                    key={c.id}
+                    className={`child-card ${openId === c.id ? 'open' : ''}`}
+                  >
+                    <div
+                      className="child-header"
+                      onClick={() => setOpenId(openId === c.id ? null : c.id)}
+                    >
+                      <span>{c.name}</span>
+                      <span className="arrow">
+                        {openId === c.id ? '▲' : '▼'}
+                      </span>
+                    </div>
+
+                    {openId === c.id && (
+                      <div className="child-details">
+                        <p>
+                          <strong>Age:</strong> {c.age}
+                        </p>
+                        <p>
+                          <strong>Difficulty:</strong> {c.difficulty}
+                        </p>
+                        <p>
+                          <strong>Contact:</strong> {c.parent_contact}
+                        </p>
+                      </div>
+                    )}
                   </div>
-                </div>
-
-                <button className="primary-btn" onClick={saveChild}>
-                  Save Child
-                </button>
+                ))}
               </>
             )}
           </div>
-
           <div className="profile-side-card">
             <CircleUserRound size={120} />
             <h3>{profile.first_name}</h3>

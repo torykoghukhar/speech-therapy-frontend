@@ -31,7 +31,9 @@
 .filter {
   display: flex;
   justify-content: center;
+  gap: 15px;
   margin-bottom: 30px;
+  flex-wrap: wrap;
 }
 
 .filter select {
@@ -200,27 +202,41 @@
 
 .empty-state {
   text-align: center;
-  margin-top: 80px;
+  margin-top: 40px;
   padding: 40px;
 }
 
-.empty-state h2 {
+.empty-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
   font-size: 26px;
-  margin-bottom: 10px;
+  font-weight: 700;
   color: #1E293B;
 }
 
-.empty-state p {
-  color: #64748B;
-  margin-bottom: 20px;
-  font-size: 15px;
+.empty-icon {
+  width: 28px;
+  height: 28px;
+  color: #6366F1;
+  transition: 0.3s ease;
 }
 
-.empty-state button {
-  background: linear-gradient(135deg, #6366F1, #4F46E5);
-  color: white;
-  padding: 12px 18px;
-  border-radius: 10px;
-  border: none;
-  cursor: pointer;
+.empty-state:hover .empty-icon {
+  transform: scale(1.15) rotate(-5deg);
+  color: #F4A300;
+}
+
+.pdf-btn:disabled {
+  background: #cbd5e1;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+.pdf-btn:disabled:hover {
+  transform: none;
+  box-shadow: none;
 }

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Trophy } from 'lucide-react'
+import { Trophy, LockKeyhole } from 'lucide-react'
 import api from '../../api/axios'
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
@@ -37,7 +37,10 @@ export default function Achievements() {
 
       <div className="achievements-wrapper">
         <div className="achievements-page">
-          <h1 className="achievements-title">🏆 Your Achievements</h1>
+          <h1 className="achievements-title">
+            {' '}
+            <Trophy className="icon" /> Your Achievements
+          </h1>
 
           <div className="achievements-grid">
             {filled.map((item, index) => {
@@ -70,7 +73,9 @@ export default function Achievements() {
                   </div>
 
                   {!item.unlocked && (
-                    <div className="achievement-overlay">🔒</div>
+                    <div className="achievement-overlay">
+                      <LockKeyhole className="icon" />
+                    </div>
                   )}
                 </div>
               )
