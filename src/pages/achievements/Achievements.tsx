@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react'
-import { Trophy, LockKeyhole } from 'lucide-react'
+import { Trophy, LockKeyhole, Star } from 'lucide-react'
 import api from '../../api/axios'
-import Header from '../../components/Header'
-import Footer from '../../components/Footer'
 import './Achievements.css'
 import type { Achievement } from '../../types/achievement'
 
@@ -33,13 +31,11 @@ export default function Achievements() {
 
   return (
     <>
-      <Header />
-
       <div className="achievements-wrapper">
         <div className="achievements-page">
           <h1 className="achievements-title">
             {' '}
-            <Trophy className="icon" /> Your Achievements
+            <Trophy className="trophy-icon" /> Your Achievements
           </h1>
 
           <div className="achievements-grid">
@@ -68,7 +64,7 @@ export default function Achievements() {
                   <div className="achievement-name">
                     {item.name}{' '}
                     <span className="points-inline">
-                      ⭐ {item.required_points}
+                      <Star className="star-icon" /> {item.required_points}
                     </span>
                   </div>
 
@@ -82,8 +78,6 @@ export default function Achievements() {
             })}
           </div>
         </div>
-
-        <Footer />
       </div>
     </>
   )

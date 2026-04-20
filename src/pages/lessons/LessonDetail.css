@@ -300,3 +300,11 @@
   0% { transform: scale(0.5) rotate(-10deg); }
   100% { transform: scale(1) rotate(0); }
 }
+
+.icon {
+  width: 18px;
+  height: 18px;
+  color: #c700f4;
+  fill: #c700f4;
+  filter: drop-shadow(0 0 6px rgba(199, 0, 244, 0.6));
+}

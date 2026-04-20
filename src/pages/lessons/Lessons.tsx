@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import api from '../../api/axios'
-import Header from '../../components/Header'
-import Footer from '../../components/Footer'
 import './Lessons.css'
 import type { Lesson } from '../../types/lesson'
 
@@ -37,8 +35,6 @@ export default function Lessons() {
 
   return (
     <>
-      <Header />
-
       <div className="lessons-page">
         <div className="lessons-container">
           <div className="lessons-header">
@@ -104,8 +100,6 @@ export default function Lessons() {
           )}
         </div>
       </div>
-
-      <Footer />
     </>
   )
 }

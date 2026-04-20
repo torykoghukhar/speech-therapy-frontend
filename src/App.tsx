@@ -1,4 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import Layout from './Layout'
+
 import Login from './pages/user/Login'
 import Register from './pages/user/Register'
 import Dashboard from './pages/user/Dashboard'
@@ -16,14 +18,17 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:uid/:token" element={<ResetPassword />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/lessons" element={<Lessons />} />
-        <Route path="/lessons/:id" element={<LessonDetail />} />
-        <Route path="/achievements" element={<Achievements />} />
-        <Route path="/progress" element={<Progress />} />
+
+        <Route element={<Layout />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/lessons" element={<Lessons />} />
+          <Route path="/lessons/:id" element={<LessonDetail />} />
+          <Route path="/achievements" element={<Achievements />} />
+          <Route path="/progress" element={<Progress />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   )
