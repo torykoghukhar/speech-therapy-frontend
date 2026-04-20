@@ -1,8 +1,13 @@
 import { useEffect, useState } from 'react'
-import { Star, Repeat, ChartSpline, SquareCheckBig } from 'lucide-react'
+import {
+  Star,
+  Repeat,
+  ChartSpline,
+  SquareCheckBig,
+  Baby,
+  UserStar,
+} from 'lucide-react'
 import api from '../../api/axios'
-import Header from '../../components/Header'
-import Footer from '../../components/Footer'
 import './Progress.css'
 import type { Stats, TooltipProps } from '../../types/progress'
 import type { TherapistChild } from '../../types/user'
@@ -44,7 +49,7 @@ export default function Progress() {
   const [role, setRole] = useState<string | null>(null)
 
   const [status, setStatus] = useState<
-    'loading' | 'no_child' | 'no_data' | 'ok'
+    'loading' | 'no_child' | 'no_data' | 'ok' | 'no_children_for_therapist'
   >('loading')
 
   const downloadPDF = async () => {
@@ -100,6 +105,8 @@ export default function Progress() {
           setChildren(r.data)
           if (r.data.length > 0) {
             setSelectedChild(r.data[0].id)
+          } else {
+            setStatus('no_children_for_therapist')
           }
         })
       }
@@ -109,9 +116,10 @@ export default function Progress() {
   if (status === 'no_child') {
     return (
       <>
-        <Header />
         <div className="empty-state">
-          <h2>No child profile 👶</h2>
+          <h2>
+            No child profile <Baby className="empty-icon" />{' '}
+          </h2>
           <p>
             You haven’t added a child yet. Add your child to start tracking
             progress.
@@ -124,7 +132,24 @@ export default function Progress() {
             Go to Profile
           </button>
         </div>
-        <Footer />
+      </>
+    )
+  }
+
+  if (status === 'no_children_for_therapist') {
+    return (
+      <>
+        <div className="empty-state">
+          <h2>
+            <UserStar className="empty-icon" /> No children assigned
+          </h2>
+          <p>
+            You don’t have any children assigned yet.
+            <br />
+            Once a child is linked to you, you’ll be able to track their
+            progress here.
+          </p>
+        </div>
       </>
     )
   }
@@ -135,7 +160,6 @@ export default function Progress() {
 
   return (
     <>
-      <Header />
       <div className="progress-page">
         <div className="progress-container">
           <div className="progress-top-bar">
@@ -299,7 +323,6 @@ export default function Progress() {
           )}
         </div>
       </div>
-      <Footer />
     </>
   )
 }

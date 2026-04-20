@@ -1,9 +1,8 @@
 import { useEffect, useState, useRef } from 'react'
+import { PartyPopper } from 'lucide-react'
 import { useParams, useNavigate } from 'react-router-dom'
 import confetti from 'canvas-confetti'
 import api from '../../api/axios'
-import Header from '../../components/Header'
-import Footer from '../../components/Footer'
 import './LessonDetail.css'
 import type { Lesson, ResultResponse } from '../../types/lesson'
 import type { Achievement } from '../../types/achievement'
@@ -246,8 +245,6 @@ export default function LessonDetail() {
 
   return (
     <>
-      <Header />
-
       <div className="lesson-player">
         {popupPoints && <div className="points-popup">+{popupPoints} ⭐</div>}
         {exercise && (
@@ -289,7 +286,9 @@ export default function LessonDetail() {
       {newAchievements.length > 0 && (
         <div className="achievement-popup">
           <div className="achievement-popup-content">
-            <h2>🎉 New Achievement!</h2>
+            <h2>
+              <PartyPopper className="icon" /> New Achievement!
+            </h2>
 
             {newAchievements.map((ach) => (
               <div key={ach.id} className="achievement-unlock-card">
@@ -333,7 +332,9 @@ export default function LessonDetail() {
               ✕
             </button>
 
-            <h2>Lesson Completed 🎉</h2>
+            <h2>
+              Lesson Completed <PartyPopper className="icon" />
+            </h2>
 
             <p className="result-score">{averageScore.toFixed(1)}%</p>
 
@@ -348,8 +349,6 @@ export default function LessonDetail() {
           </div>
         </div>
       )}
-
-      <Footer />
     </>
   )
 }

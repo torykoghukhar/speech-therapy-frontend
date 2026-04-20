@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import api from '../../api/axios'
-import Header from '../../components/Header'
-import Footer from '../../components/Footer'
-import { CircleUserRound } from 'lucide-react'
+import { CircleUserRound, Baby, Heart } from 'lucide-react'
 import './Auth.css'
 import type {
   UserProfile,
@@ -95,8 +93,6 @@ export default function Profile() {
 
   return (
     <>
-      <Header />
-
       <div className="profile-page">
         <div className="profile-container">
           <div className="profile-form-card">
@@ -248,7 +244,10 @@ export default function Profile() {
                 <h3>Your Students</h3>
 
                 {children.length === 0 && (
-                  <p className="empty-text">No children assigned yet 👶</p>
+                  <p className="empty-text">
+                    No children assigned yet
+                    <Baby className="baby-icon" />
+                  </p>
                 )}
 
                 {children.map((c) => (
@@ -293,7 +292,9 @@ export default function Profile() {
                 : 'Speech Therapist Account'}
             </p>
             <div className="profile-buttons">
-              <button className="secondary-btn">Donate ❤️</button>
+              <button className="secondary-btn">
+                Donate <Heart className="heart-icon" />
+              </button>
 
               <button className="secondary-btn" onClick={logout}>
                 Logout
@@ -302,8 +303,6 @@ export default function Profile() {
           </div>
         </div>
       </div>
-
-      <Footer />
     </>
   )
 }
