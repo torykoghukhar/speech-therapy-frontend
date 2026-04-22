@@ -7,19 +7,25 @@ import './Header.css'
 
 export default function Header() {
   const [points, setPoints] = useState<number>(0)
+  const [role, setRole] = useState<string | null>(null)
 
   useEffect(() => {
-    const loadPoints = async () => {
+    const loadData = async () => {
       try {
-        const res = await api.get('users/child/')
-        setPoints(res.data?.points || 0)
+        const [childRes, profileRes] = await Promise.all([
+          api.get('users/child/'),
+          api.get('users/profile/'),
+        ])
+
+        setPoints(childRes.data?.points || 0)
+        setRole(profileRes.data?.role)
       } catch (error) {
         // eslint-disable-next-line no-console
-        console.error('Failed to load points', error)
+        console.error('Failed to load header data', error)
       }
     }
 
-    loadPoints()
+    loadData()
   }, [])
 
   return (
@@ -36,13 +42,17 @@ export default function Header() {
           <Link to="/progress" className="nav-link">
             Progress
           </Link>
-          <Link to="/achievements" className="nav-link">
-            Achievements
-          </Link>
+          {role !== 'speech_therapist' && (
+            <Link to="/achievements" className="nav-link">
+              Achievements
+            </Link>
+          )}
         </nav>
 
         <div className="header-right">
-          <div className="points-badge">⭐ {points}</div>
+          {role !== 'speech_therapist' && (
+            <div className="points-badge">⭐ {points}</div>
+          )}
 
           <Link to="/profile" className="profile">
             <CircleUserRound size={48} strokeWidth={2} />

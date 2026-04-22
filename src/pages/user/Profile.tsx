@@ -16,6 +16,7 @@ export default function Profile() {
   const [therapists, setTherapists] = useState<Therapist[]>([])
   const [children, setChildren] = useState<TherapistChild[]>([])
   const [openId, setOpenId] = useState<number | null>(null)
+  const [donationAmount, setDonationAmount] = useState(500)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -35,6 +36,39 @@ export default function Profile() {
     }
 
     loadData()
+  }, [])
+
+  const handleDonate = async (amount = 500) => {
+    try {
+      const res = await api.post('users/payments/create-checkout/', {
+        amount,
+      })
+
+      window.location.href = res.data.url
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error('Payment error', e)
+      alert('Something went wrong with payment')
+    }
+  }
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+
+    const success = params.get('success')
+    const canceled = params.get('canceled')
+
+    if (success) {
+      alert('💛 Thank you for your support!')
+    }
+
+    if (canceled) {
+      alert('Payment canceled')
+    }
+
+    if (success || canceled) {
+      window.history.replaceState({}, '', '/profile')
+    }
   }, [])
 
   useEffect(() => {
@@ -292,10 +326,21 @@ export default function Profile() {
                 : 'Speech Therapist Account'}
             </p>
             <div className="profile-buttons">
-              <button className="secondary-btn">
-                Donate <Heart className="heart-icon" />
-              </button>
+              <div className="donate-block">
+                <div className="donate-buttons">
+                  <button onClick={() => setDonationAmount(500)}>$5</button>
+                  <button onClick={() => setDonationAmount(1000)}>$10</button>
+                  <button onClick={() => setDonationAmount(2000)}>$20</button>
+                </div>
 
+                <button
+                  className="secondary-btn"
+                  onClick={() => handleDonate(donationAmount)}
+                >
+                  Donate ${donationAmount / 100}{' '}
+                  <Heart className="heart-icon" />
+                </button>
+              </div>
               <button className="secondary-btn" onClick={logout}>
                 Logout
               </button>

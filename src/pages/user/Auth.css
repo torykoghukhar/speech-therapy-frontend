@@ -331,3 +331,28 @@
   vertical-align: middle;
   margin-left: 6px;
 }
+
+.donate-block {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.donate-input {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+
+.donate-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.donate-buttons button {
+  flex: 1;
+  padding: 8px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+}
