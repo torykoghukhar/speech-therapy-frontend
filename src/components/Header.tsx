@@ -37,14 +37,14 @@ export default function Header() {
       <div className="nav-wrapper">
         <nav className="nav">
           <Link to="/lessons" className="nav-link">
-            Lessons
+            Уроки
           </Link>
           <Link to="/progress" className="nav-link">
-            Progress
+            Прогрес
           </Link>
           {role !== 'speech_therapist' && (
             <Link to="/achievements" className="nav-link">
-              Achievements
+              Досягнення
             </Link>
           )}
         </nav>

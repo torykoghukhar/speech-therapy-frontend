@@ -1,7 +1,13 @@
 import axios from 'axios'
 
+const BASE_API_URL = 'http://127.0.0.1:8000/api/'
+
+export const publicApi = axios.create({
+  baseURL: BASE_API_URL,
+})
+
 const api = axios.create({
-  baseURL: 'http://127.0.0.1:8000/api/',
+  baseURL: BASE_API_URL,
 })
 
 api.interceptors.request.use((config) => {

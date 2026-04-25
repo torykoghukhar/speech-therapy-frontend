@@ -1,7 +1,7 @@
 import React from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
-import { publicApi } from '../../api/publicApi'
+import { publicApi } from '../../api/axios'
 import logo from '../../assets/logo.png'
 import './Auth.css'
 import { MESSAGES } from '../../constants/messages'
@@ -64,7 +64,7 @@ export default function ResetPassword() {
         new_password: formData.password,
       })
 
-      setMessage('Password successfully changed!')
+      setMessage('Пароль успішно змінено!')
 
       setTimeout(() => navigate('/'), 2000)
     } catch {
@@ -79,12 +79,12 @@ export default function ResetPassword() {
       <div className="auth-card">
         <img src={logo} alt="SoundSteps" className="auth-logo" />
 
-        <h2>Create New Password</h2>
-        <p className="auth-subtitle">Enter your new password below</p>
+        <h2>Створіть новий пароль</h2>
+        <p className="auth-subtitle">Введіть новий пароль нижче</p>
 
         <form onSubmit={handleSubmit} noValidate>
           <div className="input-group">
-            <label>New Password</label>
+            <label>Новий пароль</label>
             <input
               type="password"
               value={formData.password}
@@ -97,7 +97,7 @@ export default function ResetPassword() {
           </div>
 
           <div className="input-group">
-            <label>Confirm Password</label>
+            <label>Підтвердіть пароль</label>
             <input
               type="password"
               value={formData.confirm}
@@ -110,7 +110,7 @@ export default function ResetPassword() {
           </div>
 
           <button type="submit" className="primary-btn" disabled={loading}>
-            {loading ? 'Updating...' : 'Reset Password'}
+            {loading ? 'Оновлення...' : 'Скинути пароль'}
           </button>
         </form>
 
@@ -130,7 +130,7 @@ export default function ResetPassword() {
         )}
 
         <p className="auth-footer">
-          Back to <span onClick={() => navigate('/')}>Login</span>
+          Назад до <span onClick={() => navigate('/')}>входу</span>
         </p>
       </div>
     </div>

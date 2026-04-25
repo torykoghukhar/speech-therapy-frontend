@@ -1,10 +1,11 @@
 export const MESSAGES = {
-  REQUIRED: 'This field is required',
-  INVALID_EMAIL: 'Please enter a valid email address',
-  INVALID_PHONE: 'Phone number must contain only digits',
-  PASSWORD_TOO_SHORT: 'Password must be at least 6 characters',
-  PASSWORDS_NOT_MATCH: 'Passwords do not match',
-  SELECT_ROLE: 'Please select one role',
-  RESET_SUCCESS: 'If the email exists, a reset link was sent.',
-  RESET_ERROR: 'Something went wrong. Please try again.',
+  REQUIRED: "Це поле є обов'язковим",
+  INVALID_EMAIL: 'Будь ласка, введіть коректну електронну адресу',
+  INVALID_PHONE: 'Номер телефону має містити лише цифри',
+  PASSWORD_TOO_SHORT: 'Пароль має містити щонайменше 6 символів',
+  PASSWORDS_NOT_MATCH: 'Паролі не збігаються',
+  SELECT_ROLE: 'Будь ласка, оберіть одну роль',
+  RESET_SUCCESS:
+    'Якщо електронна адреса існує, посилання для скидання надіслано.',
+  RESET_ERROR: 'Щось пішло не так. Спробуйте ще раз.',
 }

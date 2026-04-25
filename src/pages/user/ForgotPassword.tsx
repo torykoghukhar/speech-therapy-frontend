@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { publicApi } from '../../api/publicApi'
+import { publicApi } from '../../api/axios'
 import logo from '../../assets/logo.png'
 import './Auth.css'
 import { MESSAGES } from '../../constants/messages'
@@ -61,17 +61,17 @@ export default function ForgotPassword() {
       <div className="auth-card">
         <img src={logo} alt="SoundSteps" className="auth-logo" />
 
-        <h2>Reset Password</h2>
+        <h2>Скинути пароль</h2>
         <p className="auth-subtitle">
-          Enter your email and we’ll send you a reset link
+          Введіть вашу електронну адресу, і ми надішлемо посилання для скидання
         </p>
 
         <form onSubmit={handleSubmit} noValidate>
           <div className="input-group">
-            <label>Email</label>
+            <label>Електронна адреса</label>
             <input
               type="email"
-              placeholder="Enter your email"
+              placeholder="Введіть вашу електронну адресу"
               value={email}
               onChange={(e) => handleChange(e.target.value)}
               className={errors.email ? 'error' : ''}
@@ -80,7 +80,7 @@ export default function ForgotPassword() {
           </div>
 
           <button type="submit" className="primary-btn" disabled={loading}>
-            {loading ? 'Sending...' : 'Send Reset Link'}
+            {loading ? 'Надсилання...' : 'Надіслати посилання для скидання'}
           </button>
         </form>
 
@@ -100,8 +100,8 @@ export default function ForgotPassword() {
         )}
 
         <p className="auth-footer">
-          Remembered your password?{' '}
-          <span onClick={() => navigate('/')}>Back to Login</span>
+          Згадали пароль?{' '}
+          <span onClick={() => navigate('/')}>Повернутися до входу</span>
         </p>
       </div>
     </div>

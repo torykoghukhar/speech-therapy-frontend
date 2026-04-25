@@ -108,12 +108,12 @@ export default function Register() {
     <div className="auth-page">
       <div className="auth-card register-card">
         <img src={logo} alt="SoundSteps" className="auth-logo" />
-        <h2>Create Account</h2>
+        <h2>Створити обліковий запис</h2>
 
         <form onSubmit={handleSubmit} className="register-form" noValidate>
           <div className="form-grid">
             <div className="input-group">
-              <label>Email</label>
+              <label>Електронна адреса</label>
               <input
                 name="email"
                 type="email"
@@ -126,7 +126,7 @@ export default function Register() {
             </div>
 
             <div className="input-group">
-              <label>Phone Number</label>
+              <label>Номер телефону</label>
               <input
                 name="phone_number"
                 onChange={handleChange}
@@ -138,7 +138,7 @@ export default function Register() {
             </div>
 
             <div className="input-group">
-              <label>Full Name</label>
+              <label>Повне ім'я</label>
               <input
                 name="first_name"
                 onChange={handleChange}
@@ -150,7 +150,7 @@ export default function Register() {
             </div>
 
             <div className="input-group">
-              <label>Password</label>
+              <label>Пароль</label>
               <input
                 name="password"
                 type="password"
@@ -163,7 +163,7 @@ export default function Register() {
             </div>
 
             <div className="input-group">
-              <label>Birth Date</label>
+              <label>Дата народження</label>
               <input
                 name="birth_date"
                 type="date"
@@ -176,7 +176,7 @@ export default function Register() {
             </div>
 
             <div className="input-group">
-              <label>Confirm Password</label>
+              <label>Підтвердьте пароль</label>
               <input
                 name="password_confirm"
                 type="password"
@@ -192,7 +192,7 @@ export default function Register() {
           <div className="checkbox-group">
             <label>
               <input type="checkbox" name="is_parent" onChange={handleChange} />
-              Parent
+              Батько/мати
             </label>
             <label>
               <input
@@ -200,7 +200,7 @@ export default function Register() {
                 name="is_therapist"
                 onChange={handleChange}
               />
-              Therapist
+              Логопед
             </label>
           </div>
           {errors.role && (
@@ -208,12 +208,12 @@ export default function Register() {
           )}
 
           <button type="submit" className="primary-btn">
-            Create Account
+            Створити обліковий запис
           </button>
         </form>
         <p className="auth-footer">
-          Already have an account?{' '}
-          <span onClick={() => navigate('/')}>Login</span>
+          Вже маєте обліковий запис?{' '}
+          <span onClick={() => navigate('/')}>Увійти</span>
         </p>
       </div>
     </div>

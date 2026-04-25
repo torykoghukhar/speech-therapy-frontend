@@ -35,7 +35,7 @@ export default function Achievements() {
         <div className="achievements-page">
           <h1 className="achievements-title">
             {' '}
-            <Trophy className="trophy-icon" /> Your Achievements
+            <Trophy className="trophy-icon" /> Ваші досягнення
           </h1>
 
           <div className="achievements-grid">
@@ -44,7 +44,7 @@ export default function Achievements() {
                 return (
                   <div key={index} className="achievement-card empty">
                     <Trophy size={48} strokeWidth={1.5} />
-                    <div className="empty-text">Coming soon</div>
+                    <div className="empty-text">Незабаром</div>
                   </div>
                 )
               }

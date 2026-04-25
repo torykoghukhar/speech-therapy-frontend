@@ -45,7 +45,7 @@ export default function Lessons() {
         <div className="lessons-container">
           <div className="lessons-header">
             <h1 className="lessons-title">
-              Interactive exercises tailored to your child’s speech level
+              Інтерактивні вправи, адаптовані до рівня мовлення вашої дитини
             </h1>
             <div className="title-underline" />
           </div>
@@ -53,7 +53,7 @@ export default function Lessons() {
           <div className="search-bar">
             <input
               type="text"
-              placeholder="Search lessons..."
+              placeholder="Пошук уроків..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
@@ -61,10 +61,10 @@ export default function Lessons() {
 
           {role === 'speech_therapist' && (
             <div className="therapist-banner">
-              <h2> Therapist Mode</h2>
+              <h2>Режим логопеда</h2>
               <p>
-                Here you can preview lessons exactly as children see them.
-                Review exercises, images and sounds before assigning them.
+                Тут ви можете переглядати уроки саме так, як їх бачать діти.
+                Перевіряйте вправи, зображення та звуки перед призначенням.
               </p>
 
               <div className="therapist-actions">
@@ -77,7 +77,7 @@ export default function Lessons() {
                     )
                   }
                 >
-                  + Create New Lesson
+                  + Створити новий урок
                 </button>
               </div>
             </div>
@@ -88,7 +88,7 @@ export default function Lessons() {
               items.length > 0 && (
                 <div key={age} className="age-section">
                   <div className="age-header">
-                    <h2 className="age-title">Age {age}</h2>
+                    <h2 className="age-title">Вік {age}</h2>
                     <div className="age-line" />
                   </div>
 
@@ -125,10 +125,10 @@ export default function Lessons() {
                             )}
                           <button className="primary-btn small-btn">
                             {role === 'speech_therapist'
-                              ? 'Preview Lesson'
+                              ? 'Переглянути урок'
                               : lesson.is_completed
-                                ? 'Repeat Lesson'
-                                : 'Start Lesson'}
+                                ? 'Повторити урок'
+                                : 'Почати урок'}
                           </button>
                         </div>
                       </div>
