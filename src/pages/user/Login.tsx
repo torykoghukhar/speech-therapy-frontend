@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState } from 'react'
-import { publicApi } from '../../api/publicApi'
+import { publicApi } from '../../api/axios'
 import { useNavigate } from 'react-router-dom'
 import logo from '../../assets/logo.png'
 import './Auth.css'
@@ -21,13 +21,13 @@ export default function Login() {
     const newErrors: Record<string, string> = {}
 
     if (!formData.email) {
-      newErrors.email = 'Email is required'
+      newErrors.email = "Електронна адреса є обов'язковою"
     } else if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
-      newErrors.email = 'Enter a valid email'
+      newErrors.email = 'Введіть коректну електронну адресу'
     }
 
     if (!formData.password) {
-      newErrors.password = 'Password is required'
+      newErrors.password = "Пароль є обов'язковим"
     }
 
     setErrors(newErrors)
@@ -74,7 +74,7 @@ export default function Login() {
           })
         } else {
           setErrors({
-            non_field_errors: 'Login failed. Please try again.',
+            non_field_errors: 'Не вдалося увійти. Спробуйте ще раз.',
           })
         }
       }
@@ -88,14 +88,14 @@ export default function Login() {
       <div className="auth-card">
         <img src={logo} alt="SoundSteps" className="auth-logo" />
 
-        <h2>Welcome Back</h2>
+        <h2>Раді вас бачити знову</h2>
         <p className="auth-subtitle">
-          Sign in to continue your speech training journey
+          Увійдіть, щоб продовжити ваш шлях розвитку мовлення
         </p>
 
         <form onSubmit={handleLogin} noValidate>
           <div className="input-group">
-            <label>Email</label>
+            <label>Електронна адреса</label>
             <input
               name="email"
               type="email"
@@ -107,7 +107,7 @@ export default function Login() {
           </div>
 
           <div className="input-group">
-            <label>Password</label>
+            <label>Пароль</label>
             <input
               name="password"
               type="password"
@@ -129,17 +129,17 @@ export default function Login() {
           )}
 
           <button type="submit" className="primary-btn" disabled={loading}>
-            {loading ? 'Signing in...' : 'Sign In'}
+            {loading ? 'Вхід...' : 'Увійти'}
           </button>
         </form>
 
         <p className="auth-footer">
-          Don’t have an account?{' '}
-          <span onClick={() => navigate('/register')}>Register</span>
+          Немає облікового запису?{' '}
+          <span onClick={() => navigate('/register')}>Зареєструватися</span>
         </p>
         <p className="auth-footer">
           <span onClick={() => navigate('/forgot-password')}>
-            Forgot password?
+            Забули пароль?
           </span>
         </p>
       </div>

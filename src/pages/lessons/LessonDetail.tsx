@@ -287,7 +287,7 @@ export default function LessonDetail() {
         <div className="achievement-popup">
           <div className="achievement-popup-content">
             <h2>
-              <PartyPopper className="icon" /> New Achievement!
+              <PartyPopper className="icon" /> Нове досягнення!
             </h2>
 
             {newAchievements.map((ach) => (
@@ -302,7 +302,7 @@ export default function LessonDetail() {
               className="primary-btn"
               onClick={() => setNewAchievements([])}
             >
-              Awesome!
+              Чудово!
             </button>
           </div>
         </div>
@@ -311,11 +311,11 @@ export default function LessonDetail() {
       {showFinishModal && (
         <div className="modal">
           <div className="modal-content">
-            <h3>Finish lesson?</h3>
+            <h3>Завершити урок?</h3>
 
             <div className="modal-actions">
               <button onClick={finishLesson} className="primary-btn">
-                Yes, Finish
+                Так, завершити
               </button>
             </div>
           </div>
@@ -333,18 +333,18 @@ export default function LessonDetail() {
             </button>
 
             <h2>
-              Lesson Completed <PartyPopper className="icon" />
+              Урок завершено <PartyPopper className="icon" />
             </h2>
 
             <p className="result-score">{averageScore.toFixed(1)}%</p>
 
-            <div className="points-earned">+{earnedPoints} ⭐ earned</div>
+            <div className="points-earned">+{earnedPoints} ⭐ зароблено</div>
 
             <button
               className="primary-btn"
               onClick={() => navigate('/lessons')}
             >
-              Back to Lessons
+              Назад до уроків
             </button>
           </div>
         </div>

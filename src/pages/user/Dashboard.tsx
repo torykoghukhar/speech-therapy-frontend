@@ -33,15 +33,15 @@ export default function Dashboard() {
         <div className="dashboard-hero">
           <div>
             <h1 className="dashboard-title">
-              Hello, {profile?.first_name || 'friend'} 👋
+              Привіт, {profile?.first_name || 'друже'} 👋
             </h1>
 
             <p className="dashboard-subtitle">
-              Fun speech exercises for children aged <b>2–7 years</b>. <br />
-              Learn sounds, improve pronunciation and explore the world through
-              play 🌍 <br />
+              Цікаві мовленнєві вправи для дітей віком <b>2–7 років</b>. <br />
+              Вивчайте звуки, покращуйте вимову та пізнавайте світ через гру 🌍{' '}
+              <br />
               <span className="subtitle-soft">
-                From first words to confident speech — every step matters 💛
+                Від перших слів до впевненого мовлення — кожен крок важливий 💛
               </span>
             </p>
 
@@ -50,37 +50,37 @@ export default function Dashboard() {
                 className="btn-primary"
                 onClick={() => navigate('/lessons')}
               >
-                Start Learning{' '}
+                Почати навчання{' '}
               </button>
               <button
                 className="btn-primary"
                 onClick={() => navigate('/progress')}
               >
-                View Progress{' '}
+                Переглянути прогрес{' '}
               </button>
             </div>
           </div>
 
           <img
             src={childImg}
-            alt="kids learning"
+            alt="діти навчаються"
             className="dashboard-hero-img"
           />
         </div>
 
         <div className="dashboard-about">
           <div>
-            <h2>🌟 About SoundSteps</h2>
+            <h2>🌟 Про SoundSteps</h2>
             <p>
-              SoundSteps helps children develop speech through fun and
-              interactive exercises. <br />
-              Kids learn to pronounce sounds, build vocabulary and explore the
-              world around them 🌍 <br />
+              SoundSteps допомагає дітям розвивати мовлення через цікаві та
+              інтерактивні вправи. <br />
+              Діти вчаться вимовляти звуки, поповнювати словниковий запас і
+              пізнавати навколишній світ 🌍 <br />
               <br />
               <span className="about-soft">
-                Designed with care for early childhood development, the app
-                supports language growth, listening skills and confidence
-                through playful learning
+                Розроблений з турботою про ранній розвиток дитини, застосунок
+                підтримує розвиток мовлення, навичок слухання та впевненості
+                через навчання у грі.
               </span>
             </p>
           </div>
@@ -89,16 +89,17 @@ export default function Dashboard() {
         {role === 'speech_therapist' ? (
           <div className="dashboard-info big">
             <h2>
-              <UserStar className="user-icon" /> Therapist Dashboard
+              <UserStar className="user-icon" /> Панель логопеда
             </h2>
             <p>
-              Create engaging exercises, follow each child’s progress and gently
-              guide them as they improve their speech step by step 💛 <br />
+              Створюйте цікаві вправи, відстежуйте прогрес кожної дитини та
+              м'яко супроводжуйте її крок за кроком у розвитку мовлення 💛{' '}
               <br />
-              Track how children pronounce sounds, review their results and
-              support their development with personalized practice. Help each
-              child build confidence and develop clear, natural speech in a
-              supportive and structured way.
+              <br />
+              Аналізуйте вимову звуків, переглядайте результати й підтримуйте
+              розвиток за допомогою персоналізованої практики. Допоможіть кожній
+              дитині набути впевненості та сформувати чітке природне мовлення у
+              дружньому й структурованому середовищі.
             </p>
           </div>
         ) : (
@@ -107,27 +108,27 @@ export default function Dashboard() {
               <div className="empty-state">
                 <img
                   src="https://cdn-icons-png.flaticon.com/512/4076/4076478.png"
-                  alt="start"
+                  alt="старт"
                 />
-                <h2>Let’s start your journey 🚀</h2>
+                <h2>Розпочнемо вашу подорож 🚀</h2>
                 <p>
-                  No progress yet. Start your first lesson and see your results
-                  here!
+                  Поки що немає прогресу. Почніть перший урок і побачите
+                  результати тут!
                 </p>
-                <button className="btn-primary">Start First Lesson</button>
+                <button className="btn-primary">Почати перший урок</button>
               </div>
             ) : (
               <div className="stats-grid">
                 <div className="stat-card">
                   <Star className="dashboard-icon" />
                   <h3>{stats?.summary?.total_points ?? 0}</h3>
-                  <p>Points ⭐</p>
+                  <p>Бали ⭐</p>
                 </div>
 
                 <div className="stat-card">
                   <ChartSpline className="dashboard-icon" />
                   <h3>{stats?.summary?.average_score?.toFixed(1) ?? 0}%</h3>
-                  <p>Average Score</p>
+                  <p>Середній бал</p>
                 </div>
 
                 <div className="stat-card">
@@ -138,7 +139,7 @@ export default function Dashboard() {
                       : 0}
                     %
                   </h3>
-                  <p>Success Rate</p>
+                  <p>Рівень успішності</p>
                 </div>
               </div>
             )}
@@ -148,28 +149,28 @@ export default function Dashboard() {
         <div className="dashboard-grid">
           <div className="dashboard-card">
             <BookOpen className="dashboard-icon" />
-            <h3>Lessons</h3>
-            <p>Fun speech exercises for kids</p>
+            <h3>Уроки</h3>
+            <p>Цікаві мовленнєві вправи для дітей</p>
           </div>
 
           <div className="dashboard-card">
             <ChartSpline className="dashboard-icon" />
-            <h3>Progress</h3>
-            <p>See how skills improve</p>
+            <h3>Прогрес</h3>
+            <p>Переглядайте, як покращуються навички</p>
           </div>
 
           <div className="dashboard-card">
             <Trophy className="dashboard-icon" />
-            <h3>Achievements</h3>
-            <p>Unlock rewards</p>
+            <h3>Досягнення</h3>
+            <p>Відкривайте нагороди</p>
           </div>
         </div>
 
         <div className="dashboard-info">
-          <h2>✨ Daily tip</h2>
+          <h2>✨ Порада дня</h2>
           <p>
-            Even 10 minutes of practice every day helps children improve faster
-            💛
+            Навіть 10 хвилин практики щодня допомагають дітям прогресувати
+            швидше 💛
           </p>
         </div>
       </div>

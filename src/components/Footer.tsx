@@ -1,8 +1,8 @@
 export default function Footer() {
   return (
     <footer style={styles.footer}>
-      <p style={styles.text}>© 2026 SoundSteps – Speech Training Platform</p>
-      <p style={styles.text}>Contact: support@soundsteps.com</p>
+      <p style={styles.text}>© 2026 SoundSteps – Платформа розвитку мовлення</p>
+      <p style={styles.text}>Контакти: support@soundsteps.com</p>
     </footer>
   )
 }

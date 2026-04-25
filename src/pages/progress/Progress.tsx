@@ -118,18 +118,18 @@ export default function Progress() {
       <>
         <div className="empty-state">
           <h2>
-            No child profile <Baby className="empty-icon" />{' '}
+            Немає профілю дитини <Baby className="empty-icon" />{' '}
           </h2>
           <p>
-            You haven’t added a child yet. Add your child to start tracking
-            progress.
+            Ви ще не додали дитину. Додайте дитину, щоб почати відстежувати
+            прогрес.
           </p>
 
           <button
             className="pdf-btn"
             onClick={() => (window.location.href = '/profile')}
           >
-            Go to Profile
+            Перейти до профілю
           </button>
         </div>
       </>
@@ -141,13 +141,13 @@ export default function Progress() {
       <>
         <div className="empty-state">
           <h2>
-            <UserStar className="empty-icon" /> No children assigned
+            <UserStar className="empty-icon" /> Немає призначених дітей
           </h2>
           <p>
-            You don’t have any children assigned yet.
+            У вас поки немає призначених дітей.
             <br />
-            Once a child is linked to you, you’ll be able to track their
-            progress here.
+            Коли дитину буде прив'язано до вас, ви зможете відстежувати її
+            прогрес тут.
           </p>
         </div>
       </>
@@ -155,7 +155,7 @@ export default function Progress() {
   }
 
   if (status === 'loading' || !stats) {
-    return <div>Loading...</div>
+    return <div>Завантаження...</div>
   }
 
   return (
@@ -171,19 +171,19 @@ export default function Progress() {
                 (role === 'speech_therapist' && !selectedChild)
               }
             >
-              Download PDF
+              Завантажити PDF
             </button>
           </div>
           <div className="progress-header">
-            <h1 className="progress-title">Child Progress Overview</h1>
+            <h1 className="progress-title">Огляд прогресу дитини</h1>
             <div className="title-underline" />
           </div>
 
           <div className="filter">
             <select value={period} onChange={(e) => setPeriod(e.target.value)}>
-              <option value="7d">Last 7 days</option>
-              <option value="30d">Last 30 days</option>
-              <option value="all">All time</option>
+              <option value="7d">Останні 7 днів</option>
+              <option value="30d">Останні 30 днів</option>
+              <option value="all">За весь час</option>
             </select>
             {role === 'speech_therapist' && (
               <select
@@ -203,9 +203,9 @@ export default function Progress() {
             <div className="empty-state">
               <h2 className="empty-title">
                 <ChartSpline className="empty-icon" />
-                No progress yet
+                Ще немає прогресу
               </h2>
-              <p>This child hasn’t completed any lessons yet.</p>
+              <p>Ця дитина ще не завершила жодного уроку.</p>
             </div>
           ) : (
             <>
@@ -213,31 +213,31 @@ export default function Progress() {
                 <div className="card">
                   <Star className="card-icon" />
                   <p>{stats.summary?.total_points}</p>
-                  <small>Total Points</small>
+                  <small>Усього балів</small>
                 </div>
 
                 <div className="card">
                   <ChartSpline className="card-icon" />
                   <p>{stats.summary?.average_score.toFixed(1)}%</p>
-                  <small>Avg Score</small>
+                  <small>Середній бал</small>
                 </div>
 
                 <div className="card">
                   <SquareCheckBig className="card-icon" />
                   <p>{(stats.summary?.success_rate * 100).toFixed(0)}%</p>
-                  <small>Success Rate</small>
+                  <small>Рівень успішності</small>
                 </div>
 
                 <div className="card">
                   <Repeat className="card-icon" />
                   <p>{stats.summary?.avg_attempts.toFixed(2)}</p>
-                  <small>Avg Attempts</small>
+                  <small>Середня кількість спроб</small>
                 </div>
               </div>
 
               <div className="charts-grid">
                 <div className="chart-card">
-                  <h3>Progress Over Time</h3>
+                  <h3>Прогрес з часом</h3>
                   <ResponsiveContainer width="100%" height={260}>
                     <LineChart data={stats.progress}>
                       <CartesianGrid strokeDasharray="3 3" opacity={0.7} />
@@ -259,7 +259,7 @@ export default function Progress() {
                       <Line
                         type="monotone"
                         dataKey="score"
-                        name="Average Score (%)"
+                        name="Середній бал (%)"
                         stroke="#6366F1"
                         strokeWidth={3}
                         dot={{ r: 5 }}
@@ -270,7 +270,7 @@ export default function Progress() {
                 </div>
 
                 <div className="chart-card">
-                  <h3>Attempts per Exercise</h3>
+                  <h3>Спроби по вправах</h3>
                   <ResponsiveContainer width="100%" height={260}>
                     <BarChart data={stats.attempts}>
                       <CartesianGrid strokeDasharray="3 3" opacity={0.7} />
@@ -289,7 +289,7 @@ export default function Progress() {
 
                       <Bar
                         dataKey="avg_attempts"
-                        name="Avg Attempts"
+                        name="Сер. спроб"
                         radius={[6, 6, 0, 0]}
                         fill="#F59E0B"
                       />
@@ -298,7 +298,7 @@ export default function Progress() {
                 </div>
 
                 <div className="chart-card">
-                  <h3>Problem Sounds</h3>
+                  <h3>Проблемні звуки</h3>
                   <ResponsiveContainer width="100%" height={260}>
                     <BarChart data={stats.weak_phonemes}>
                       <CartesianGrid strokeDasharray="3 3" opacity={0.7} />
@@ -311,7 +311,7 @@ export default function Progress() {
 
                       <Bar
                         dataKey="count"
-                        name="Errors Count"
+                        name="Кількість помилок"
                         radius={[6, 6, 0, 0]}
                         fill="#4CAF50"
                       />
