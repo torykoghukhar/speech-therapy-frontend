@@ -7,20 +7,26 @@ import type { Lesson } from '../../types/lesson'
 export default function Lessons() {
   const [lessons, setLessons] = useState<Lesson[]>([])
   const [search, setSearch] = useState('')
+  const [role, setRole] = useState<string | null>(null)
   const navigate = useNavigate()
 
   useEffect(() => {
-    const loadLessons = async () => {
+    const loadData = async () => {
       try {
-        const res = await api.get('lessons/')
-        setLessons(res.data)
+        const [lessonsRes, profileRes] = await Promise.all([
+          api.get('lessons/'),
+          api.get('users/profile/'),
+        ])
+
+        setLessons(lessonsRes.data)
+        setRole(profileRes.data.role)
       } catch (error) {
         // eslint-disable-next-line no-console
-        console.error('Failed to load lessons', error)
+        console.error('Failed to load data', error)
       }
     }
 
-    loadLessons()
+    loadData()
   }, [])
 
   const filteredLessons = lessons.filter((lesson) =>
@@ -53,6 +59,30 @@ export default function Lessons() {
             />
           </div>
 
+          {role === 'speech_therapist' && (
+            <div className="therapist-banner">
+              <h2> Therapist Mode</h2>
+              <p>
+                Here you can preview lessons exactly as children see them.
+                Review exercises, images and sounds before assigning them.
+              </p>
+
+              <div className="therapist-actions">
+                <button
+                  className="primary-btn"
+                  onClick={() =>
+                    window.open(
+                      'http://127.0.0.1:8000/admin/lessons/lesson/add/',
+                      '_blank'
+                    )
+                  }
+                >
+                  + Create New Lesson
+                </button>
+              </div>
+            </div>
+          )}
+
           {Object.entries(grouped).map(
             ([age, items]) =>
               items.length > 0 && (
@@ -67,7 +97,13 @@ export default function Lessons() {
                       <div
                         key={lesson.id}
                         className="lesson-card"
-                        onClick={() => navigate(`/lessons/${lesson.id}`)}
+                        onClick={() =>
+                          navigate(
+                            role === 'speech_therapist'
+                              ? `/lessons/${lesson.id}/preview`
+                              : `/lessons/${lesson.id}`
+                          )
+                        }
                       >
                         <div className="lesson-image-wrapper">
                           <img
@@ -80,16 +116,19 @@ export default function Lessons() {
                         <div className="lesson-content">
                           <h3>{lesson.title}</h3>
                           <p>{lesson.description}</p>
-                          {lesson.is_completed &&
+                          {role !== 'speech_therapist' &&
+                            lesson.is_completed &&
                             lesson.best_score !== null && (
                               <div className="lesson-score">
                                 ⭐ {lesson.best_score}%
                               </div>
                             )}
                           <button className="primary-btn small-btn">
-                            {lesson.is_completed
-                              ? 'Repeat Lesson'
-                              : 'Start Lesson'}
+                            {role === 'speech_therapist'
+                              ? 'Preview Lesson'
+                              : lesson.is_completed
+                                ? 'Repeat Lesson'
+                                : 'Start Lesson'}
                           </button>
                         </div>
                       </div>
